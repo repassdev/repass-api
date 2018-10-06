@@ -1,55 +1,32 @@
 const express = require('express')
-const app = express();
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
-const User = require('./models/User');
+const app = express();
+const port = 3000;
+const databaseURI = 'mongodb://admin:repass123@ds125073.mlab.com:25073/repass_dev';
 
-mongoose.connect('mongodb://admin:repass123@ds125073.mlab.com:25073/repass_dev');
+mongoose.connect(databaseURI, { useNewUrlParser: true, useCreateIndex: true }, (err) => {
+  if(err){
+    console.log(`Database error: ${err}`);
+  }else{
+    console.log('Connected to database.');
+  }
+});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
+
+const apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes);
 
 app.get('/', (req, res) => {
-  res.json('Repass');
+  return res.json('Repass');
 });
 
-app.post('/api/register', (req, res) => {
-  var salt = bcrypt.genSaltSync(10);
-  var hash = bcrypt.hashSync(req.body.password, salt);
-
-  var user = new User();
-
-  newUser.email = req.body.email;
-  newUser.password = hash;
-  newUser.admin = true;
-
-  newUser.save((err, createdUser) => {
-    if(err){
-      return res.json(`Error: ${err}`);
-    }else{
-      return res.json(`User created: ${createdUser}`);
-    }
-  });
-});
-
-app.post('/api/login', (req, res) => {
-  User.findOne({ email: req.body.email }, (err, userFound) => {
-    if(err){
-      return res.json(`Error: ${err}`);
-    }else{
-      if(userFound){
-        if(bcrypt.compareSync(req.body.password, userFound.password)){
-          return res.json("User logged in.");
-        }else{
-          return res.json("Wrong password.");
-        }
-      }else{
-        return res.json("User not found.");
-      }
-    }
-  });
-});
-
-app.listen(3000);
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}.`);
+  }
+);
