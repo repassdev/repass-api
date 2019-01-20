@@ -2,11 +2,13 @@ const express = require('express')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 const databaseURI = 'mongodb://admin:repass123@ds125073.mlab.com:25073/repass_dev';
 
+app.use(cors());
 mongoose.connect(databaseURI, { useNewUrlParser: true, useCreateIndex: true }, (err) => {
   if(err){
     console.log(`Database error: ${err}`);
