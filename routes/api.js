@@ -4,11 +4,11 @@ const consts = require('../consts');
 
 const router = express.Router();
 
-const authRoutes = require('./auth');
+const userRoutes = require('./user');
 const ticketRoutes = require('./ticket');
 const eventRoutes = require('./event');
-router.use('/', authRoutes);
-router.use('/', ticketRoutes);
-router.use('/', eventRoutes);
+router.use('/user', userRoutes);
+router.use('/ticket', ticketRoutes);
+router.use('/event', eventRoutes);
 
 module.exports = router;

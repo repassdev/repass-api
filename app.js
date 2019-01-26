@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const databaseURI = 'mongodb+srv://admin:repass123@repassdev-lm7gr.mongodb.net/test?retryWrites=true';
 
 app.use(cors());

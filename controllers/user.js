@@ -1,13 +1,10 @@
-const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 const consts = require('../consts');
 
-const router = express.Router();
-
-router.post('/signup', (req, res) => {
+exports.signup = (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(req.body.password, salt);
 
@@ -24,8 +21,8 @@ router.post('/signup', (req, res) => {
   newUser.password = hash;
   newUser.isAdmin = true;
 
-  newUser.save((err, createdUser) => {
-    if (err) {
+  newUser.save((errUser, createdUser) => {
+    if (errUser) {
       return res.status(400).json({
         errors: [
           "Email já utilizado."
@@ -46,15 +43,13 @@ router.post('/signup', (req, res) => {
       });
     }
   });
-});
+}
 
-router.post('/login', (req, res) => {
-  User.findOne({ email: req.body.email }, (err, userFound) => {
-    if (err) {
-      return res.json({
-        errors: [
-          err
-        ]
+exports.login = (req, res) => {
+  User.findOne({ email: req.body.email }, (errUser, userFound) => {
+    if (errUser) {
+      return res.status(400).json({
+        ...errUser
       });
     } else {
       if (userFound) {
@@ -62,9 +57,9 @@ router.post('/login', (req, res) => {
           const payload = {
             id: userFound._id
           };
-    
+
           const token = jwt.sign(payload, consts.consts.RSA_PRIVATE_KEY, { expiresIn: '30d' });
-    
+
           return res.status(200).json({
             user: {
               name: userFound.name,
@@ -87,6 +82,18 @@ router.post('/login', (req, res) => {
       }
     }
   });
-});
+}
 
-module.exports = router;
+exports.delete = (req, res) => {
+  User.findByIdAndDelete(decoded.id, (errUser, userDeleted) => {
+    if (errUser) {
+      return res.status(400).json({
+        ...errUser
+      });
+    } else {
+      return res.status(200).json({
+        user: userDeleted
+      });
+    }
+  });
+}
