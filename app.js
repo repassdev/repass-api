@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const app = express();
 const port = 3000;
-const databaseURI = 'mongodb://admin:repass123@ds125073.mlab.com:25073/repass_dev';
+const databaseURI = 'mongodb+srv://admin:repass123@repassdev-lm7gr.mongodb.net/test?retryWrites=true';
 
 app.use(cors());
 mongoose.connect(databaseURI, { useNewUrlParser: true, useCreateIndex: true }, (err) => {
