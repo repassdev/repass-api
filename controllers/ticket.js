@@ -53,7 +53,10 @@ exports.delete = (req, res) => {
 }
 
 exports.getTicket = (req, res) => {
-  Ticket.findById(req.params.id, (errTicket, ticketFound) => {
+  Ticket.findById(req.params.id).
+  populate('event').
+  populate('owner').
+  exec(function (errTicket, ticketFound) {
     if (errTicket) {
       return res.status(400).json({
         ...errTicket
@@ -67,7 +70,9 @@ exports.getTicket = (req, res) => {
 }
 
 exports.getTickets = (req, res) => {
-  Ticket.find((errTicket, ticketsFound) => {
+  Ticket.find().
+  populate('event').
+  exec(function (errTicket, ticketsFound) {
     if (errTicket) {
       return res.status(400).json({
         ...errTicket

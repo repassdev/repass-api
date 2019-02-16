@@ -5,6 +5,8 @@ const checkAdmin = require('../helpers/check-admin');
 
 const router = express.Router();
 
+router.get('/', UserController.get);
+
 router.post('/signup', UserController.signup);
 
 router.post('/login', UserController.login);
