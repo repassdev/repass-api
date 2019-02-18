@@ -27,6 +27,11 @@ const userSchema = new Schema({
     minlength: 3,
     maxlength: 254,
   },
+  addressState: {
+    type: String,
+    minlength: 2,
+    maxlength: 254,
+  },
   addressCountry: {
     type: String,
     minlength: 3,
@@ -41,12 +46,15 @@ const userSchema = new Schema({
     type: String,
     minlength: 3,
     maxlength: 254,
-    unique: true
+    required: true, 
+    unique: true, 
+    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   },
   password: {
     type: String,
     minlength: 3,
-    maxlength: 254
+    maxlength: 254,
+    required: true
   },
   isAdmin: {
     type: Boolean,
