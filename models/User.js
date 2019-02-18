@@ -27,6 +27,11 @@ const userSchema = new Schema({
     minlength: 3,
     maxlength: 254,
   },
+  addressState: {
+    type: String,
+    minlength: 2,
+    maxlength: 254,
+  },
   addressCountry: {
     type: String,
     minlength: 3,

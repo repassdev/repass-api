@@ -9,6 +9,8 @@ router.post('/', checkAuth, TicketController.create);
 
 router.delete('/:id', checkAuth, TicketController.delete);
 
+router.get('/user', checkAuth, TicketController.getUserTickets);
+
 router.get('/:id', TicketController.getTicket);
 
 router.get('/', TicketController.getTickets);

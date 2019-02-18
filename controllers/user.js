@@ -4,6 +4,24 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const consts = require('../consts');
 
+exports.get = (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, consts.consts.RSA_PRIVATE_KEY, function (errToken, decoded) {
+    User.findById(decoded.id, (errUser, userFound) => {
+      if (errUser) {
+        return res.status(401).json({
+          ...errUser
+        });
+      } else {
+        return res.status(200).json({
+          user: userFound
+        });
+      }
+    });
+  });
+
+}
+
 exports.signup = (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(req.body.password, salt);
@@ -15,6 +33,7 @@ exports.signup = (req, res) => {
   newUser.addressStreet = req.body.addressStreet;
   newUser.addressNumber = req.body.addressNumber;
   newUser.addressCity = req.body.addressCity;
+  newUser.addressState = req.body.addressState;
   newUser.addressCountry = req.body.addressCountry;
   newUser.phone = req.body.phone;
   newUser.email = req.body.email;
@@ -85,7 +104,7 @@ exports.login = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-  User.findByIdAndDelete(decoded.id, (errUser, userDeleted) => {
+  User.findByIdAndDelete(req.body.id, (errUser, userDeleted) => {
     if (errUser) {
       return res.status(400).json({
         ...errUser
